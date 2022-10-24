@@ -3,14 +3,14 @@ import { styled } from '..'
 export const ProductContainer = styled('main', {
   display: 'grid',
   gridTemplateColumns: '1fr 1fr',
-  alignItems: 'center',
+  alignItems: 'stretch',
   gap: '4rem',
 
   maxWidth: 1180,
   margin: '0 auto',
 })
 
-export const ImageContainer = styled('main', {
+export const ImageContainer = styled('div', {
   width: '100%',
   maxWidth: 576,
   height: 656,
@@ -27,7 +27,7 @@ export const ImageContainer = styled('main', {
   },
 })
 
-export const ProductDetails = styled('main', {
+export const ProductDetails = styled('div', {
   display: 'flex',
   flexDirection: 'column',
 
@@ -61,8 +61,13 @@ export const ProductDetails = styled('main', {
     fontWeight: 'bold',
     fontSize: '$md',
 
-    '&:hover': {
-      backgroundColor: '$green500',
+    '&:disabled': {
+      opacity: 0.6,
+      cursor: 'not-allowed',
+    },
+
+    '&:not(:disabled):hover': {
+      backgroundColor: '$green300',
     },
   },
 })
