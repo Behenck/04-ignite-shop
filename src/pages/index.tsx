@@ -1,16 +1,21 @@
 import Image from 'next/image'
-import { HomeContainer, Product, ProductInfo } from '../styles/pages/home'
+import Link from 'next/link'
+import Head from 'next/head'
+import { GetStaticProps } from 'next'
 
 import { useKeenSlider } from 'keen-slider/react'
-
 import 'keen-slider/keen-slider.min.css'
-import { GetStaticProps } from 'next'
+
+import { HomeContainer, Product, ProductInfo } from '../styles/pages/home'
 
 import { stripe } from '../lib/stripe'
 import Stripe from 'stripe'
-import Link from 'next/link'
-import Head from 'next/head'
+
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 import { Handbag } from 'phosphor-react'
+import { useRouter } from 'next/router'
 
 interface HomeProps {
   products: {
@@ -22,6 +27,8 @@ interface HomeProps {
 }
 
 export default function Home({ products }: HomeProps) {
+  const { isFallback } = useRouter()
+
   const [sliderRef] = useKeenSlider<HTMLDivElement>({
     loop: false,
     mode: 'free',
@@ -31,6 +38,18 @@ export default function Home({ products }: HomeProps) {
       spacing: 48,
     },
   })
+
+  if (!isFallback) {
+    return (
+      <HomeContainer>
+        <SkeletonTheme baseColor="#fff" highlightColor="#ccc">
+          <p>
+            <Skeleton count={3} width={100} />
+          </p>
+        </SkeletonTheme>
+      </HomeContainer>
+    )
+  }
 
   return (
     <>
