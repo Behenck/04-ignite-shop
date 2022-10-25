@@ -52,7 +52,7 @@ export const ProductDetails = styled('div', {
 
   button: {
     marginTop: 'auto',
-    backgroundColor: '$green500',
+    backgroundColor: '$green300',
     border: 0,
     color: '$white',
     borderRadius: 8,
@@ -67,7 +67,7 @@ export const ProductDetails = styled('div', {
     },
 
     '&:not(:disabled):hover': {
-      backgroundColor: '$green300',
+      backgroundColor: '$green500',
     },
   },
 })

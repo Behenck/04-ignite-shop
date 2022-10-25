@@ -88,3 +88,19 @@ export const ProductInfo = styled('div', {
     color: '$green300',
   },
 })
+
+export const SkeletonContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1rem',
+
+  div: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  '& + &': {
+    marginLeft: '2rem',
+  },
+})
