@@ -26,13 +26,14 @@ export const Header = styled('header', {
     color: '$gray400',
     cursor: 'pointer',
     transition: 'color 0.2s',
+    position: 'relative',
 
     '&:hover': {
       color: '$gray300',
     },
 
     '&::before': {
-      content: '10',
+      content: '1',
       position: 'absolute',
       background: '$green500',
       color: '$white',
@@ -42,8 +43,10 @@ export const Header = styled('header', {
       borderRadius: '50%',
       width: '1.5rem',
       height: '1.5rem',
-      top: '0',
-      right: '19rem',
+      top: '-0.75rem',
+      right: '-0.75rem',
+      fontSize: '0.875rem',
+      border: '3px solid $gray900',
     },
   },
 })
