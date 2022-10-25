@@ -7,6 +7,9 @@ import { Container, Header } from '../styles/pages/app'
 
 import { Handbag } from 'phosphor-react'
 
+import * as Dialog from '@radix-ui/react-dialog'
+import { Sidebar } from '../components/Sidebar'
+
 globalStyles()
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -15,9 +18,15 @@ export default function App({ Component, pageProps }: AppProps) {
       <Header>
         <Image src={logoImg} alt="" />
 
-        <button>
-          <Handbag size={24} weight="bold" />
-        </button>
+        <Dialog.Root>
+          <Dialog.Trigger asChild>
+            <button>
+              <Handbag size={24} weight="bold" />
+            </button>
+          </Dialog.Trigger>
+
+          <Sidebar />
+        </Dialog.Root>
       </Header>
 
       <Component {...pageProps} />
