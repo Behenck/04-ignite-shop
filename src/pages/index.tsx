@@ -29,6 +29,7 @@ interface ProductProps {
   name: string
   imageUrl: string
   price: number
+  priceFormatted: string
 }
 
 interface HomeProps {
@@ -49,7 +50,7 @@ export default function Home({ products }: HomeProps) {
     },
   })
 
-  const { addItem, cartDetails } = useShoppingCart()
+  const { cartDetails, addItem } = useShoppingCart()
 
   function handleAddItemToCart(product: ProductProps) {
     const productToCart = {
@@ -60,8 +61,18 @@ export default function Home({ products }: HomeProps) {
       image: product.imageUrl,
     }
 
-    addItem(productToCart)
-    console.log(cartDetails)
+    const cart = Object.keys(cartDetails)
+    const productExistInCart = cart.map((id) => {
+      return id === product.id
+    })
+
+    if (productExistInCart) {
+      console.log(productExistInCart + 'ss')
+
+      addItem(productToCart)
+    } else {
+      console.log(productExistInCart + 'ss')
+    }
   }
 
   if (isFallback) {
@@ -93,14 +104,14 @@ export default function Home({ products }: HomeProps) {
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {
           return (
-            <Link key={product.id} href={`/product/${product.id}`} prefetch>
+            <Link key={product.id} href={`/product/${product.id}`}>
               <Product className="keen-slider__slide">
                 <Image src={product.imageUrl} alt="" width={520} height={480} />
 
                 <footer>
                   <ProductInfo>
                     <strong>{product.name}</strong>
-                    <span>{product.price}</span>
+                    <span>{product.priceFormatted}</span>
                   </ProductInfo>
 
                   <button onClick={() => handleAddItemToCart(product)}>
@@ -128,7 +139,8 @@ export const getStaticProps: GetStaticProps = async () => {
       id: product.id,
       name: product.name,
       imageUrl: product.images[0],
-      price: new Intl.NumberFormat('pt-BR', {
+      price: price.unit_amount,
+      priceFormatted: new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
       }).format(price.unit_amount / 100),

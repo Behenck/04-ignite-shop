@@ -17,20 +17,6 @@ globalStyles()
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Container>
-      <Header>
-        <Image src={logoImg} alt="" />
-
-        <Dialog.Root>
-          <Dialog.Trigger asChild>
-            <button>
-              <Handbag size={24} weight="bold" />
-            </button>
-          </Dialog.Trigger>
-
-          <Sidebar />
-        </Dialog.Root>
-      </Header>
-
       <CartProvider
         mode="payment"
         cartMode="client-only"
@@ -39,6 +25,19 @@ export default function App({ Component, pageProps }: AppProps) {
         cancelUrl={`${process.env.NEXT_URL}`}
         currency="BRL"
       >
+        <Header>
+          <Image src={logoImg} alt="" />
+
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <button>
+                <Handbag size={24} weight="bold" />
+              </button>
+            </Dialog.Trigger>
+
+            <Sidebar />
+          </Dialog.Root>
+        </Header>
         <Component {...pageProps} />
       </CartProvider>
     </Container>
