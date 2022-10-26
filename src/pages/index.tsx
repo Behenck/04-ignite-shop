@@ -22,13 +22,17 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { Handbag } from 'phosphor-react'
 import { useRouter } from 'next/router'
 
+import { useShoppingCart } from 'use-shopping-cart'
+
+interface ProductProps {
+  id: string
+  name: string
+  imageUrl: string
+  price: number
+}
+
 interface HomeProps {
-  products: {
-    id: string
-    name: string
-    imageUrl: string
-    price: string
-  }[]
+  products: ProductProps[]
 }
 
 export default function Home({ products }: HomeProps) {
@@ -44,6 +48,21 @@ export default function Home({ products }: HomeProps) {
       spacing: 48,
     },
   })
+
+  const { addItem, cartDetails } = useShoppingCart()
+
+  function handleAddItemToCart(product: ProductProps) {
+    const productToCart = {
+      name: product.name,
+      id: product.id,
+      price: product.price,
+      currency: 'BRL',
+      image: product.imageUrl,
+    }
+
+    addItem(productToCart)
+    console.log(cartDetails)
+  }
 
   if (isFallback) {
     return (
@@ -84,7 +103,7 @@ export default function Home({ products }: HomeProps) {
                     <span>{product.price}</span>
                   </ProductInfo>
 
-                  <button>
+                  <button onClick={() => handleAddItemToCart(product)}>
                     <Handbag size={32} weight="bold" />
                   </button>
                 </footer>
