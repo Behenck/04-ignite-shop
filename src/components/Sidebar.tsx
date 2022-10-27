@@ -15,7 +15,13 @@ import {
   Title,
 } from '../styles/pages/components/Sidebar'
 
-export function Sidebar() {
+import { animated } from 'react-spring'
+
+interface SidebarProps {
+  transitions: any
+}
+
+export function Sidebar({ transitions }: SidebarProps) {
   const { cartDetails, cartCount, removeItem, formattedTotalPrice } =
     useShoppingCart()
   const cart = Object.values(cartDetails)
@@ -51,53 +57,68 @@ export function Sidebar() {
 
   return (
     <Dialog.Portal>
-      <Content>
-        <Title>Sacola de compras</Title>
-        <CloseButton>
-          <X size={32} />
-        </CloseButton>
+      {transitions((styles, item) =>
+        item ? (
+          <>
+            <Content forceMount asChild>
+              <animated.div style={styles}>
+                <Title>Sacola de compras</Title>
+                <CloseButton>
+                  <X size={32} />
+                </CloseButton>
 
-        {cartCount === 0 ? (
-          <CartContainer>
-            <span>Seu carrinho está vazio!</span>
-          </CartContainer>
-        ) : (
-          <CartContainer>
-            {cart.map((cart) => {
-              return (
-                <CartContent key={cart.id}>
-                  <ImageContainer>
-                    <Image src={cart.image} width={94} height={94} alt="" />
-                  </ImageContainer>
-                  <div>
-                    <span>{cart.name}</span>
-                    <strong>{cart.formattedPrice}</strong>
-                    <button onClick={() => removeItem(cart.id)}>Remover</button>
-                  </div>
-                </CartContent>
-              )
-            })}
+                {cartCount === 0 ? (
+                  <CartContainer>
+                    <span>Seu carrinho está vazio!</span>
+                  </CartContainer>
+                ) : (
+                  <CartContainer>
+                    {cart.map((cart) => {
+                      return (
+                        <CartContent key={cart.id}>
+                          <ImageContainer>
+                            <Image
+                              src={cart.image}
+                              width={94}
+                              height={94}
+                              alt=""
+                            />
+                          </ImageContainer>
+                          <div>
+                            <span>{cart.name}</span>
+                            <strong>{cart.formattedPrice}</strong>
+                            <button onClick={() => removeItem(cart.id)}>
+                              Remover
+                            </button>
+                          </div>
+                        </CartContent>
+                      )
+                    })}
 
-            <CartDetails>
-              <div>
-                <span>Quantidade</span>
-                <span>{cartCount} itens</span>
-              </div>
-              <div>
-                <strong>Valor total</strong>
-                <strong>{formattedTotalPrice}</strong>
-              </div>
-            </CartDetails>
+                    <CartDetails>
+                      <div>
+                        <span>Quantidade</span>
+                        <span>{cartCount} itens</span>
+                      </div>
+                      <div>
+                        <strong>Valor total</strong>
+                        <strong>{formattedTotalPrice}</strong>
+                      </div>
+                    </CartDetails>
 
-            <FinalizedCartButton
-              disabled={isCreatingCheckoutSession}
-              onClick={handleByProduct}
-            >
-              Finalizar Compra
-            </FinalizedCartButton>
-          </CartContainer>
-        )}
-      </Content>
+                    <FinalizedCartButton
+                      disabled={isCreatingCheckoutSession}
+                      onClick={handleByProduct}
+                    >
+                      Finalizar Compra
+                    </FinalizedCartButton>
+                  </CartContainer>
+                )}
+              </animated.div>
+            </Content>
+          </>
+        ) : null,
+      )}
     </Dialog.Portal>
   )
 }

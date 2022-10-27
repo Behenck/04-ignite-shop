@@ -13,13 +13,19 @@ import logoImg from '../assets/logo.svg'
 import { Sidebar } from './Sidebar'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useTransition, config } from 'react-spring'
+import { useState } from 'react'
 
 export function Header() {
   const { cartCount } = useShoppingCart()
-
   const { pathname } = useRouter()
-
-  console.log(pathname)
+  const [open, setOpen] = useState(false)
+  const transitions = useTransition(open, {
+    from: { opacity: 0, x: 500 },
+    enter: { opacity: 1, x: 0 },
+    leave: { opacity: 0, x: 10 },
+    config: config.stiff,
+  })
 
   if (pathname === '/success') {
     return (
@@ -37,7 +43,7 @@ export function Header() {
         <Image src={logoImg} alt="" />
       </Link>
 
-      <Dialog.Root>
+      <Dialog.Root open={open} onOpenChange={setOpen}>
         <Dialog.Trigger asChild>
           {cartCount === 0 ? (
             <Button>
@@ -50,7 +56,7 @@ export function Header() {
           )}
         </Dialog.Trigger>
 
-        <Sidebar />
+        <Sidebar transitions={transitions} />
       </Dialog.Root>
     </HeaderContainer>
   )

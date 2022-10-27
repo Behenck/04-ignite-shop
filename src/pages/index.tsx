@@ -6,17 +6,11 @@ import { GetStaticProps } from 'next'
 import { useKeenSlider } from 'keen-slider/react'
 import 'keen-slider/keen-slider.min.css'
 
-import {
-  HomeContainer,
-  Product,
-  ProductInfo,
-  SkeletonContainer,
-} from '../styles/pages/home'
+import { HomeContainer, Product, ProductInfo } from '../styles/pages/home'
 
 import { stripe } from '../lib/stripe'
 import Stripe from 'stripe'
 
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 import { Handbag } from 'phosphor-react'
@@ -24,6 +18,8 @@ import { useRouter } from 'next/router'
 
 import { useShoppingCart } from 'use-shopping-cart'
 import toast from 'react-hot-toast'
+
+import { SkeletonIndex } from '../components/SkeletonScreen/SkeletonIndex'
 
 interface ProductProps {
   id: string
@@ -40,7 +36,6 @@ interface HomeProps {
 
 export default function Home({ products }: HomeProps) {
   const { isFallback } = useRouter()
-  const skeletonSliderQuantity = [1, 2, 3]
 
   const [sliderRef] = useKeenSlider<HTMLDivElement>({
     loop: false,
@@ -76,23 +71,7 @@ export default function Home({ products }: HomeProps) {
   }
 
   if (isFallback) {
-    return (
-      <HomeContainer ref={sliderRef} className="keen-slider">
-        <SkeletonTheme baseColor="#202024" highlightColor="#26262b">
-          {skeletonSliderQuantity.map((skeleton) => {
-            return (
-              <SkeletonContainer key={skeleton[0]}>
-                <Skeleton count={1} width={540} height={600} />
-                <div>
-                  <Skeleton count={1} width={280} height={32} />
-                  <Skeleton count={1} width={80} height={32} />
-                </div>
-              </SkeletonContainer>
-            )
-          })}
-        </SkeletonTheme>
-      </HomeContainer>
-    )
+    return <SkeletonIndex />
   }
 
   return (

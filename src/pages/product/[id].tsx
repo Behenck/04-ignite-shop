@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import Stripe from 'stripe'
 import { useShoppingCart } from 'use-shopping-cart'
+import { SkeletonProduct } from '../../components/SkeletonScreen/SkeletonProduct'
 import { stripe } from '../../lib/stripe'
 import {
   ImageContainer,
@@ -53,7 +54,7 @@ export default function Product({ product }: ProductProps) {
   }
 
   if (isFallback) {
-    return <p>Loading...</p>
+    return <SkeletonProduct />
   }
 
   return (
