@@ -12,6 +12,8 @@ export const Content = styled(Dialog.Content, {
   top: '0',
   right: '0',
   transform: 'translate(-0%, -0%)',
+
+  boxShadow: 'rgba(0, 0, 0, 0.45) -20px 5px 20px -10px',
 })
 export const Title = styled(Dialog.Title, {
   marginTop: '4.5rem',

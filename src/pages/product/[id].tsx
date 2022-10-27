@@ -1,10 +1,10 @@
-import axios from 'axios'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import toast from 'react-hot-toast'
 import Stripe from 'stripe'
+import { useShoppingCart } from 'use-shopping-cart'
 import { stripe } from '../../lib/stripe'
 import {
   ImageContainer,
@@ -12,38 +12,43 @@ import {
   ProductDetails,
 } from '../../styles/pages/product'
 
+interface IProduct {
+  id: string
+  name: string
+  imageUrl: string
+  price: number
+  description: string
+  defaultPriceId: string
+  priceFormatted: string
+}
+
 interface ProductProps {
-  product: {
-    id: string
-    name: string
-    imageUrl: string
-    price: string
-    description: string
-    defaultPriceId: string
-  }
+  product: IProduct
 }
 
 export default function Product({ product }: ProductProps) {
   const { isFallback } = useRouter()
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
-    useState(false)
 
-  async function handleByProduct() {
-    try {
-      setIsCreatingCheckoutSession(true)
+  const { cartDetails, addItem } = useShoppingCart()
 
-      const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId,
-      })
+  function handleAddItemToCart() {
+    const productToCart = {
+      name: product.name,
+      id: product.id,
+      price: product.price,
+      currency: 'BRL',
+      image: product.imageUrl,
+      defaultPriceId: product.defaultPriceId,
+    }
 
-      const { checkoutUrl } = response.data
+    const cart = Object.keys(cartDetails)
+    const productExistInCart = cart.find((id) => id === product.id)
 
-      window.location.href = checkoutUrl
-    } catch (err) {
-      // Conectar com uma ferramenta de observabilidade (Datadog / Sentry)
-      setIsCreatingCheckoutSession(false)
-
-      alert('Falha ao redirecionar ao checkout')
+    if (!productExistInCart) {
+      addItem(productToCart)
+      toast.success(`Você adicionou ${product.name}  ao carrinho`)
+    } else {
+      toast.error('Esse item já está no seu carrinho!')
     }
   }
 
@@ -64,16 +69,11 @@ export default function Product({ product }: ProductProps) {
 
         <ProductDetails>
           <h1>{product.name}</h1>
-          <span>{product.price}</span>
+          <span>{product.priceFormatted}</span>
 
           <p>{product.description}</p>
 
-          <button
-            disabled={isCreatingCheckoutSession}
-            onClick={handleByProduct}
-          >
-            Comprar Agora
-          </button>
+          <button onClick={handleAddItemToCart}>Comprar Agora</button>
         </ProductDetails>
       </ProductContainer>
     </>
@@ -104,7 +104,8 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
         id: product.id,
         name: product.name,
         imageUrl: product.images[0],
-        price: new Intl.NumberFormat('pt-BR', {
+        price: price.unit_amount,
+        priceFormatted: new Intl.NumberFormat('pt-BR', {
           style: 'currency',
           currency: 'BRL',
         }).format(price.unit_amount / 100),

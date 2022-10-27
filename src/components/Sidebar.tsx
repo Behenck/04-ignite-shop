@@ -1,6 +1,8 @@
 import * as Dialog from '@radix-ui/react-dialog'
+import axios from 'axios'
 import Image from 'next/image'
 import { X } from 'phosphor-react'
+import { useState } from 'react'
 import { useShoppingCart } from 'use-shopping-cart'
 import {
   CartContainer,
@@ -17,6 +19,35 @@ export function Sidebar() {
   const { cartDetails, cartCount, removeItem, formattedTotalPrice } =
     useShoppingCart()
   const cart = Object.values(cartDetails)
+
+  const pricesId = cart.map((product) => {
+    return {
+      price: product.defaultPriceId,
+      quantity: product.quantity,
+    }
+  })
+
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
+    useState(false)
+
+  async function handleByProduct() {
+    try {
+      setIsCreatingCheckoutSession(true)
+      console.log(pricesId)
+      const response = await axios.post('/api/checkout', {
+        pricesId,
+      })
+
+      const { checkoutUrl } = response.data
+
+      window.location.href = checkoutUrl
+    } catch (err) {
+      // Conectar com uma ferramenta de observabilidade (Datadog / Sentry)
+      setIsCreatingCheckoutSession(false)
+
+      alert('Falha ao redirecionar ao checkout')
+    }
+  }
 
   return (
     <Dialog.Portal>
@@ -53,7 +84,12 @@ export function Sidebar() {
             </div>
           </CartDetails>
 
-          <FinalizedCartButton>Finalizar Compra</FinalizedCartButton>
+          <FinalizedCartButton
+            disabled={isCreatingCheckoutSession}
+            onClick={handleByProduct}
+          >
+            Finalizar Compra
+          </FinalizedCartButton>
         </CartContainer>
       </Content>
     </Dialog.Portal>

@@ -23,6 +23,7 @@ import { Handbag } from 'phosphor-react'
 import { useRouter } from 'next/router'
 
 import { useShoppingCart } from 'use-shopping-cart'
+import toast from 'react-hot-toast'
 
 interface ProductProps {
   id: string
@@ -30,6 +31,7 @@ interface ProductProps {
   imageUrl: string
   price: number
   priceFormatted: string
+  defaultPriceId: string
 }
 
 interface HomeProps {
@@ -59,19 +61,17 @@ export default function Home({ products }: HomeProps) {
       price: product.price,
       currency: 'BRL',
       image: product.imageUrl,
+      defaultPriceId: product.defaultPriceId,
     }
 
     const cart = Object.keys(cartDetails)
-    const productExistInCart = cart.map((id) => {
-      return id === product.id
-    })
+    const productExistInCart = cart.find((id) => id === product.id)
 
-    if (productExistInCart) {
-      console.log(productExistInCart + 'ss')
-
+    if (!productExistInCart) {
       addItem(productToCart)
+      toast.success(`Você adicionou ${product.name}  ao carrinho`)
     } else {
-      console.log(productExistInCart + 'ss')
+      toast.error('Esse item já está no seu carrinho!')
     }
   }
 
@@ -104,22 +104,22 @@ export default function Home({ products }: HomeProps) {
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {
           return (
-            <Link key={product.id} href={`/product/${product.id}`}>
-              <Product className="keen-slider__slide">
+            <Product className="keen-slider__slide" key={product.id}>
+              <Link href={`/product/${product.id}`}>
                 <Image src={product.imageUrl} alt="" width={520} height={480} />
+              </Link>
 
-                <footer>
-                  <ProductInfo>
-                    <strong>{product.name}</strong>
-                    <span>{product.priceFormatted}</span>
-                  </ProductInfo>
+              <footer>
+                <ProductInfo>
+                  <strong>{product.name}</strong>
+                  <span>{product.priceFormatted}</span>
+                </ProductInfo>
 
-                  <button onClick={() => handleAddItemToCart(product)}>
-                    <Handbag size={32} weight="bold" />
-                  </button>
-                </footer>
-              </Product>
-            </Link>
+                <button onClick={() => handleAddItemToCart(product)}>
+                  <Handbag size={32} weight="bold" />
+                </button>
+              </footer>
+            </Product>
           )
         })}
       </HomeContainer>
@@ -144,6 +144,7 @@ export const getStaticProps: GetStaticProps = async () => {
         style: 'currency',
         currency: 'BRL',
       }).format(price.unit_amount / 100),
+      defaultPriceId: price.id,
     }
   })
 

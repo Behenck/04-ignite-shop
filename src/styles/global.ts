@@ -1,6 +1,8 @@
 import { globalCss } from '.'
 
 export const globalStyles = globalCss({
+  '@import': '../styles/radix/stylesRadix.css',
+
   '*': {
     margin: 0,
     padding: 0,

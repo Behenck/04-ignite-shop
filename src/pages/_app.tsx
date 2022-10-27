@@ -1,22 +1,19 @@
 import { AppProps } from 'next/app'
 import { globalStyles } from '../styles/global'
 
-import logoImg from '../assets/logo.svg'
-import Image from 'next/image'
-import { Container, Header } from '../styles/pages/app'
-
-import { Handbag } from 'phosphor-react'
-
-import * as Dialog from '@radix-ui/react-dialog'
-import { Sidebar } from '../components/Sidebar'
+import { Container } from '../styles/pages/app'
 
 import { CartProvider } from 'use-shopping-cart'
+import { Toaster } from 'react-hot-toast'
+import { Header } from '../components/Header'
 
 globalStyles()
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Container>
+      <Toaster position="top-right" reverseOrder={false} />
+
       <CartProvider
         mode="payment"
         cartMode="client-only"
@@ -25,19 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
         cancelUrl={`${process.env.NEXT_URL}`}
         currency="BRL"
       >
-        <Header>
-          <Image src={logoImg} alt="" />
-
-          <Dialog.Root>
-            <Dialog.Trigger asChild>
-              <button>
-                <Handbag size={24} weight="bold" />
-              </button>
-            </Dialog.Trigger>
-
-            <Sidebar />
-          </Dialog.Root>
-        </Header>
+        <Header />
         <Component {...pageProps} />
       </CartProvider>
     </Container>
