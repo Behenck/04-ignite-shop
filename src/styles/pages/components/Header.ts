@@ -11,6 +11,17 @@ export const HeaderContainer = styled('header', {
   justifyContent: 'space-between',
 })
 
+export const HeaderSuccessContainer = styled('header', {
+  padding: '2rem 0',
+  width: '100%',
+  maxWidth: 1180,
+  margin: '0 auto',
+
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+})
+
 export const Button = styled('button', {
   background: '$gray800',
   border: 0,

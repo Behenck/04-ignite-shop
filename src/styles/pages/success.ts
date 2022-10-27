@@ -8,20 +8,26 @@ export const SuccessContainer = styled('main', {
   margin: '0 auto',
   height: 656,
 
-  h1: {
-    fontSize: '$2xl',
-    color: '$gray-100',
-  },
+  div: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
 
-  p: {
-    fontSize: '$xl',
-    color: '$gray-300',
-    maxWidth: 560,
-    marginTop: '2rem',
-    textAlign: 'center',
-    lineHeight: 1.4,
-  },
+    h1: {
+      fontSize: '$2xl',
+      color: '$gray-100',
+    },
 
+    p: {
+      fontSize: '$xl',
+      color: '$gray-300',
+      maxWidth: 560,
+      marginTop: '2rem',
+      textAlign: 'center',
+      lineHeight: 1.4,
+    },
+  },
   a: {
     marginTop: '5rem',
     display: 'block',
@@ -37,13 +43,19 @@ export const SuccessContainer = styled('main', {
 })
 
 export const ImageContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'row !important',
   width: '100%',
-  maxWidth: 130,
-  height: 145,
+  marginBottom: '4rem',
+})
+
+export const ImageContent = styled('div', {
+  width: '100%',
+  maxWidth: 140,
+  height: 140,
   background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
-  borderRadius: 8,
+  borderRadius: '50%',
   padding: '0.25rem',
-  marginTop: '4rem',
 
   display: 'flex',
   alignItems: 'center',
@@ -51,5 +63,11 @@ export const ImageContainer = styled('div', {
 
   img: {
     objectFit: 'cover',
+  },
+
+  '& +&': {
+    position: 'relative',
+    marginLeft: '-3rem',
+    boxShadow: '0px 0px 60px rgba(0, 0, 0, 0.8)',
   },
 })

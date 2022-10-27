@@ -1,7 +1,7 @@
 import { globalCss } from '.'
 
 export const globalStyles = globalCss({
-  '@import': '../styles/radix/stylesRadix.css',
+  '@import': '/radix/stylesRadix.css',
 
   '*': {
     margin: 0,

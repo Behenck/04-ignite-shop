@@ -23,7 +23,7 @@ export function Sidebar() {
   const pricesId = cart.map((product) => {
     return {
       price: product.defaultPriceId,
-      quantity: product.quantity,
+      quantity: product.quantity0,
     }
   })
 
@@ -57,40 +57,46 @@ export function Sidebar() {
           <X size={32} />
         </CloseButton>
 
-        <CartContainer>
-          {cart.map((cart) => {
-            return (
-              <CartContent key={cart.id}>
-                <ImageContainer>
-                  <Image src={cart.image} width={94} height={94} alt="" />
-                </ImageContainer>
-                <div>
-                  <span>{cart.name}</span>
-                  <strong>{cart.formattedPrice}</strong>
-                  <button onClick={() => removeItem(cart.id)}>Remover</button>
-                </div>
-              </CartContent>
-            )
-          })}
+        {cartCount === 0 ? (
+          <CartContainer>
+            <span>Seu carrinho está vazio!</span>
+          </CartContainer>
+        ) : (
+          <CartContainer>
+            {cart.map((cart) => {
+              return (
+                <CartContent key={cart.id}>
+                  <ImageContainer>
+                    <Image src={cart.image} width={94} height={94} alt="" />
+                  </ImageContainer>
+                  <div>
+                    <span>{cart.name}</span>
+                    <strong>{cart.formattedPrice}</strong>
+                    <button onClick={() => removeItem(cart.id)}>Remover</button>
+                  </div>
+                </CartContent>
+              )
+            })}
 
-          <CartDetails>
-            <div>
-              <span>Quantidade</span>
-              <span>{cartCount} itens</span>
-            </div>
-            <div>
-              <strong>Valor total</strong>
-              <strong>{formattedTotalPrice}</strong>
-            </div>
-          </CartDetails>
+            <CartDetails>
+              <div>
+                <span>Quantidade</span>
+                <span>{cartCount} itens</span>
+              </div>
+              <div>
+                <strong>Valor total</strong>
+                <strong>{formattedTotalPrice}</strong>
+              </div>
+            </CartDetails>
 
-          <FinalizedCartButton
-            disabled={isCreatingCheckoutSession}
-            onClick={handleByProduct}
-          >
-            Finalizar Compra
-          </FinalizedCartButton>
-        </CartContainer>
+            <FinalizedCartButton
+              disabled={isCreatingCheckoutSession}
+              onClick={handleByProduct}
+            >
+              Finalizar Compra
+            </FinalizedCartButton>
+          </CartContainer>
+        )}
       </Content>
     </Dialog.Portal>
   )

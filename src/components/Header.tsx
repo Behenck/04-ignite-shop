@@ -7,16 +7,35 @@ import {
   Button,
   ButtonQuantityInCart,
   HeaderContainer,
+  HeaderSuccessContainer,
 } from '../styles/pages/components/Header'
 import logoImg from '../assets/logo.svg'
 import { Sidebar } from './Sidebar'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export function Header() {
   const { cartCount } = useShoppingCart()
 
+  const { pathname } = useRouter()
+
+  console.log(pathname)
+
+  if (pathname === '/success') {
+    return (
+      <HeaderSuccessContainer>
+        <Link href="/">
+          <Image src={logoImg} alt="" />
+        </Link>
+      </HeaderSuccessContainer>
+    )
+  }
+
   return (
     <HeaderContainer>
-      <Image src={logoImg} alt="" />
+      <Link href="/">
+        <Image src={logoImg} alt="" />
+      </Link>
 
       <Dialog.Root>
         <Dialog.Trigger asChild>

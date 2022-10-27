@@ -11,6 +11,7 @@ export const Content = styled(Dialog.Content, {
   position: 'fixed',
   top: '0',
   right: '0',
+  zIndex: '100',
   transform: 'translate(-0%, -0%)',
 
   boxShadow: 'rgba(0, 0, 0, 0.45) -20px 5px 20px -10px',
